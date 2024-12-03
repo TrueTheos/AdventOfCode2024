@@ -10,7 +10,9 @@ namespace AdventOfCode
     {
         private static readonly Dictionary<int, Type> Days = new()
         {
-            { 1, typeof(Day1) }
+            { 1, typeof(Day1) },
+            { 2, typeof(Day2) },
+            { 3, typeof(Day3) }
         };
 
         static void Main(string[] args)
