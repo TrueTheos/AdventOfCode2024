@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace AdventOfCode
 {
+    [Day(4)]
     public class Day4 : AdventDayBase
     {
         public override void SolvePart1(string input)
