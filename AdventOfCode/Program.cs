@@ -27,10 +27,8 @@ namespace AdventOfCode
                     Console.WriteLine("Enter the part to benchmark (1 or 2):");
                     if (int.TryParse(Console.ReadLine(), out int benchmarkPart) && (benchmarkPart == 1 || benchmarkPart == 2))
                     {
-                        // Configure the benchmark runner with the specific day and part
                         BenchmarkRunnerClass.ConfigureForSpecificDayAndPart(benchmarkDay, benchmarkPart);
 
-                        // Run the benchmark for the specified day and part
                         BenchmarkRunner.Run<BenchmarkRunnerClass>();
                     }
                     else
@@ -93,7 +91,6 @@ namespace AdventOfCode
     {
         private readonly Dictionary<int, Type> _days = Program.Days;
 
-        // Filtered dynamically based on user input
         [ParamsSource(nameof(GetFilteredDays))]
         public int Day { get; set; }
 
@@ -129,17 +126,13 @@ namespace AdventOfCode
                 _adventDay.SolvePart2(_input);
         }
 
-        // Filter days dynamically based on user input
         public static IEnumerable<int> GetFilteredDays() => new[] { DayToBenchmark };
 
-        // Filter parts dynamically based on user input
         public static IEnumerable<int> GetFilteredParts() => new[] { PartToBenchmark };
 
-        // Static properties to hold user-selected day and part
         public static int DayToBenchmark { get; private set; }
         public static int PartToBenchmark { get; private set; }
 
-        // Configure the benchmark runner for a specific day and part
         public static void ConfigureForSpecificDayAndPart(int day, int part)
         {
             if (Program.Days.ContainsKey(day) && (part == 1 || part == 2))

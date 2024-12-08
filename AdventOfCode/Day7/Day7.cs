@@ -82,6 +82,8 @@ namespace AdventOfCode.Day7
                         int op = remainingMask % 3;
                         remainingMask /= 3;
 
+                        if (currentResult > goal) break;
+
                         switch (op)
                         {
                             case 0:
