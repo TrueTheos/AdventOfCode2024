@@ -33,7 +33,7 @@ namespace AdventOfCode.Day8
             foreach (var antA in antenas)
             {
                 foreach (var antB in antenas)
-                {
+                {  
                     if (antA == antB || antA.c != antB.c) continue;
                     int xDiff = antB.x - antA.x;
                     int yDiff = antB.y - antA.y;
