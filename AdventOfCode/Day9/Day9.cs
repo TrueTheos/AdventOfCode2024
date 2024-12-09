@@ -66,77 +66,85 @@ namespace AdventOfCode.Day9
 
         public override void SolvePart2(string input)
         {
-            List<int> withDots = new();
-            List<(int index, int length)> freeSpaces = new();
-            List<(int index, int id, int length)> files = new();
-
+            int afterTransformLength = 0;
             int length = input.TrimEnd().Length;
-            int id = 0;
+
+            int fileCount = (length + 1) / 2;
+            int spaceCount = length / 2;
+
+            int[] spaceIndexes = new int[spaceCount];
+            int[] spaceLengths = new int[spaceCount];
+
+            int[] fileIndexes = new int[fileCount];
+            int[] fileIds = new int[fileCount];
+            int[] fileLengths = new int[fileCount];
+
+            int fileIndex = 0;
+            int spaceIndex = 0;
             for (int i = 0; i < length; i++)
             {
-                int digit = int.Parse(input[i].ToString());
+                int digit = input[i] - '0';
                 if (i % 2 == 0)
                 {
-                    files.Add((withDots.Count, id, digit));
-                    for (int j = 0; j < digit; j++)
-                    {
-                        withDots.Add(id);              
-                    }
-                    id++;
+                    fileIndexes[fileIndex] = afterTransformLength;
+                    fileIds[fileIndex] = fileIndex;
+                    fileLengths[fileIndex] = digit;
+                    fileIndex++;
                 }
                 else
                 {
-                    freeSpaces.Add((withDots.Count, digit));
-
-                    for(int j = 0; j < digit; j++)
-                    {
-                        withDots.Add(-1);
-                    }
-                }
-            }
-
-            for (int i = files.Count - 1; i >= 0; i--)
-            {
-                var currFile = files[i];
-
-                int freeSpaceStartIndex = -1;
-                int freeSpaceIndex = 0;
-
-                for (int j = 0; j < freeSpaces.Count; j++)
-                {
-                    if (freeSpaces[j].length >= currFile.length && freeSpaces[j].index < currFile.index)
-                    {
-                        freeSpaceStartIndex = freeSpaces[j].index;
-                        freeSpaceIndex = j;
-                        break;
-                    }
+                    spaceLengths[spaceIndex] = digit;
+                    spaceIndexes[spaceIndex] = afterTransformLength;
+                    spaceIndex++;
                 }
 
-                if (freeSpaceStartIndex == -1) continue;
-                
-                for (int j = 0; j < currFile.length; j++)
-                {
-                    withDots[freeSpaceStartIndex + j] = currFile.id;
-                    withDots[currFile.index + j] = -1;
-                }
-
-                if (freeSpaces[freeSpaceIndex].length > currFile.length)
-                {
-                    freeSpaces[freeSpaceIndex] = new(freeSpaces[freeSpaceIndex].index + currFile.length, freeSpaces[freeSpaceIndex].length - currFile.length);
-                }
-                else
-                {
-                    freeSpaces.RemoveAt(freeSpaceIndex);
-                }
+                afterTransformLength += digit;
             }
 
             long sum = 0;
 
-            for (int i = 0; i < withDots.Count; i++)
+            for (int i = fileCount - 1; i >= 0; i--)
             {
-                if (withDots[i] == -1) continue;
+                int fIndex = fileIndexes[i];
+                int fLength = fileLengths[i];
+                int fId = fileIds[i];
 
-                sum += i * withDots[i];
+                int spaceStartIndex = -1;
+                int spaceIndexInList = 0;
+
+                for (int j = 0; j < spaceIndex; j++)
+                {
+                    if (spaceIndexes[j] != -1 && spaceLengths[j] >= fLength && spaceIndexes[j] < fIndex)
+                    {
+                        spaceStartIndex = spaceIndexes[j];
+                        spaceIndexInList = j;
+                        break;
+                    }
+                }
+
+                if (spaceStartIndex == -1)
+                {
+                    for (int j = 0; j < fLength; j++)
+                    {
+                        sum += (fIndex + j) * fId;
+                    }
+                    continue;
+                }
+                
+                for (int j = 0; j < fLength; j++)
+                {
+                    sum += (spaceStartIndex + j) * fId;
+                }
+
+                if (spaceLengths[spaceIndexInList] > fLength)
+                {
+                    spaceIndexes[spaceIndexInList] += fLength;
+                    spaceLengths[spaceIndexInList] -= fLength;
+                }
+                else
+                {
+                    spaceIndexes[spaceIndexInList] = -1;
+                }
             }
 
             //Console.WriteLine(span.ToString());
