@@ -1,6 +1,9 @@
-﻿using System;
+﻿using BenchmarkDotNet.Attributes;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -128,6 +131,7 @@ namespace AdventOfCode.Day9
                     {
                         sum += (fIndex + j) * fId;
                     }
+
                     continue;
                 }
                 
@@ -150,5 +154,8 @@ namespace AdventOfCode.Day9
             //Console.WriteLine(span.ToString());
             PrintResult(2, sum.ToString());
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private int GetSum(int pos, int size, int id) => ((size * ((pos << 1) + size - 1)) >>> 1) * id;
     }
 }
